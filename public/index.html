@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Movie Search</title>
+  <link href="./styles/style.css" rel="stylesheet">
+  
+</head>
+<body>
+  <div class="container">
+    <h1>Movie Search</h1>
+
+    <div id="search-section">
+      <input type="text" id="searchInput" placeholder="Search for a movie..." />
+      <button onclick="searchMovies()">Search</button>
+    </div>
+
+    <div id="results"></div>
+    <div id="modal" class="modal hidden">
+      <div class="modal-content" id="modal-content">
+        <span class="close-button" onclick="closeModal()">×</span>
+      </div>
+    </div>
+  </div>
+  
+
+
+  <script>
+    async function searchMovies() {
+      const query = document.getElementById('searchInput').value;
+      const res = await fetch(`/search?query=${encodeURIComponent(query)}`);
+      const data = await res.json();
+      const resultsDiv = document.getElementById('results');
+
+      if (data.results) {
+        resultsDiv.innerHTML = data.results.map(movie => `
+          <div class="movie-card" onclick="getDetails('${movie.imdbID}')">
+            <img src="${movie.poster}" alt="${movie.title}" />
+            <h3>${movie.title} (${movie.year})</h3>
+          </div>
+        `).join('');
+      } else {
+        console.log(data)
+        if (data.error == "Missing query") {
+          resultsDiv.innerHTML = `<p>You missed to type the move name</p>`;
+        } else {
+          resultsDiv.innerHTML = `<p>No results found</p>`;
+        }
+        
+      }
+    }
+
+    async function getDetails(imdbID) {
+      const res = await fetch(`/movie/${imdbID}`);
+      const data = await res.json();
+      const movie = data.movie;
+
+      console.log(movie);
+
+      const modal = document.getElementById('modal');
+      const modalContent = document.getElementById('modal-content');
+
+      modalContent.innerHTML = `
+        <span class="close-button" onclick="closeModal()">x</span>
+        <h2>${movie.Title} (${movie.Year})</h2>
+        <p><strong>Genre:</strong> ${movie.Genre}</p>
+        <p><strong>Plot:</strong> ${movie.Plot}</p>
+        <p><strong>Director:</strong> ${movie.Director}</p>
+        <p><strong>Actors:</strong> ${movie.Actors}</p>
+        <p><strong>IMDb Rating:</strong> ${movie.imdbRating}</p>
+        <img src="${movie.Poster}" width="200" />
+      `;
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('modal');
+      modal.classList.add('hidden');
+    }
+
+    window.onclick = function (event) {
+      const modal = document.getElementById('modal');
+      if (event.target === modal) {
+        closeModal();
+      }
+    }
+    
+  </script>
+</body>
+</html>
