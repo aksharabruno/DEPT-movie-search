@@ -68,3 +68,12 @@ OMDB_API_KEY = your_api_key_here
 npm run dev
 ```
 The site should be running in http://localhost:3000 now.
+
+---
+
+## 📚 References
+
+- [OMDb API Documentation](https://www.omdbapi.com/)
+- [Express.js Documentation](https://expressjs.com/en/guide/routing.html)
+- [Axios GitHub Repository](https://axios-http.com/docs/intro)
+- [TypeScript Handbook](https://nodejs.org/en/learn/typescript/introduction)
