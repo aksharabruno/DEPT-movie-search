@@ -34,7 +34,7 @@ TypeScript makes development smoother. It helped catch bugs early, made handling
 I explored other options, but OMDb stood out. It’s free to use, doesn’t require complex setup, and offers up to 1000 requests per day — more than enough for this scope.
 
 ### In-Memory Caching — Simple and Effective
-For a small app, in-memory caching works well — it’s fast, and easy to implement. If this were a production system, I’d likely switch to Redis and cache invalidation.
+For a small app, in-memory caching works well — it’s fast, and easy to implement. If this were a production system, I’d likely switch to Redis and add cache invalidation.
 
 ### Plain HTML/CSS + Vanilla JS — Functional and Focused
 Since the brief emphasized backend logic, I intentionally skipped frontend frameworks to keep things light. Still, I added small touches like autocomplete and modal views to keep the user experience smooth and polished.
