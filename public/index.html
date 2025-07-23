@@ -15,6 +15,9 @@
       <input type="text" id="searchInput" placeholder="Search for a movie..." />
       <button onclick="searchMovies()">Search</button>
     </div>
+    <div id="recent-searches">
+
+    </div>
 
     <div id="results"></div>
     <div id="modal" class="modal hidden">
@@ -29,8 +32,8 @@
   <script>
     async function searchMovies() {
       const query = document.getElementById('searchInput').value;
-      const res = await fetch(`/search?query=${encodeURIComponent(query)}`);
-      const data = await res.json();
+      res = await fetch(`/search?query=${encodeURIComponent(query)}`);
+      data = await res.json();
       const resultsDiv = document.getElementById('results');
 
       if (data.results) {
@@ -46,8 +49,17 @@
           resultsDiv.innerHTML = `<p>You missed to type the move name</p>`;
         } else {
           resultsDiv.innerHTML = `<p>No results found</p>`;
-        }
-        
+        } 
+      }
+
+      res = await fetch(`/recent`);
+      data = await res.json();
+      const recent = data.recent.join(", ")
+      const recentDiv = document.getElementById('recent-searches');
+      if (data.recent) {
+        recentDiv.innerHTML = `<div>
+          <span>Your recent searches: </span><span>${recent}</span>
+          </div>`
       }
     }
 

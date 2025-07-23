@@ -8,10 +8,10 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 const OMDB_API_KEY = process.env.OMDB_API_KEY;
-const CACHE: Record<string, any> = {};  //is there a better way to implement cache?
+const CACHE: Record<string, any> = {};
+const RECENT_SEARCHES: string[] = [];
+const MAX_RECENT = 5;
 
-
-// Static frontend- will add later
 app.use(express.static(path.join(__dirname, '../public')));
 
 //health check endpoint
@@ -24,6 +24,13 @@ app.get('/search', async(req: Request, res: Response) => {
     console.log(req.query)
     const query = req.query.query as string;
     if (!query) return res.status(400).json({ error: 'Missing query' });
+
+    if (!RECENT_SEARCHES.includes(query)) {
+        RECENT_SEARCHES.unshift(query); 
+        if (RECENT_SEARCHES.length > MAX_RECENT) {
+            RECENT_SEARCHES.pop(); 
+        }
+    }
 
     if (CACHE[query]) {
         return res.json({source:'cache', results: CACHE[query]});
@@ -47,7 +54,7 @@ app.get('/search', async(req: Request, res: Response) => {
             year: movie.Year,
             imdbID: movie.imdbID,
             type: movie.Type,
-            poster: movie.Poster
+            poster: movie.Poster,
         }))
 
         CACHE[query] = results; 
@@ -85,9 +92,12 @@ app.get('/movie/:imdbID', async (req: Request, res: Response) => {
         console.error('Error fetching movie details from OMDB API:', error);
         return res.status(500).json({ error: 'Failed to fetch movie details' });
     }
-
-    console.log('cache:', CACHE);
 });
+
+app.get('/recent', (req: Request, res: Response) => {
+  res.json({ recent: RECENT_SEARCHES });
+});
+
 
 //start the server
 app.listen(PORT, () => {

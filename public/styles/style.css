@@ -11,11 +11,16 @@ body {
 }
 
 h1 {
-    color: #38bdf8;
+    color: #d4b896;
 }
 #search-section {
     display: flex;
     gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+#recent-searches {
+    font-size: small;
     margin-bottom: 2rem;
 }
 
@@ -29,16 +34,16 @@ input {
 
 button {
     padding: 0.6rem 1.2rem;
-    background: #38bdf8;
+    background: #d4b896;
     border: none;
     border-radius: 5px;
     font-weight: bold;
-    color: #0f172a;
+    color: #2d293b;
     cursor: pointer;
 }
 
 button:hover {
-    background: #0ea5e9;
+    background: #d5b083;
 }
 
 #results, #details {
